@@ -21,7 +21,7 @@ Tutoriel complet pour déployer une application Symfony 8 avec FrankenPHP sur un
 
 ```text
 ┌─────────────────────────────────────────────────────┐
-│                    VPS Hostinger                     │
+│                    VPS Hostinger                    │
 │  ┌─────────────────┐    ┌─────────────────────────┐ │
 │  │   FrankenPHP    │    │      PostgreSQL         │ │
 │  │   (Symfony)     │───▶│      (Database)         │ │
