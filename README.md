@@ -213,23 +213,29 @@ Pour créer un token Docker Hub :
 
 ## Partie 4 : Déploiement sur VPS Hostinger
 
-### 4.1 Configurer le DNS
+### 4.1 Configurer le pare-feu
 
-Dans le panneau Hostinger (hPanel) :
+Dans le panneau Hostinger (hPanel), aller dans **VPS** → **Firewall** et configurer les règles suivantes :
 
-1. Aller dans **Domaines** → Votre domaine → **DNS / Nameservers**
-2. Ajouter un enregistrement **A** :
-   - Type : `A`
-   - Nom : `@`
-   - Pointe vers : `IP_DU_VPS`
-   - TTL : 3600
+| Action | Protocole | Port | Source |
+|--------|-----------|------|--------|
+| Accept | TCP | 80 | Any |
+| Accept | TCP | 443 | Any |
+| Accept | UDP | 443 | Any |
+| Drop | Any | Any | Any |
 
-### 4.2 Accéder au Docker Manager
+> **Note** : Le port UDP 443 est nécessaire pour HTTP/3 (QUIC).
+
+### 4.2 Configurer le DNS
+
+Chez votre fournisseur de nom de domaine, créer un enregistrement A pour pointer vers l'IP du VPS Hostinger.
+
+### 4.3 Accéder au Docker Manager
 
 1. Dans hPanel, aller dans **VPS** → Votre VPS
 2. Cliquer sur **Docker Manager** dans le menu latéral
 
-### 4.3 Déployer via "Compose from URL"
+### 4.4 Déployer via "Compose from URL"
 
 1. Cliquer sur **Compose from URL**
 2. Coller l'URL du fichier compose :
@@ -240,7 +246,7 @@ https://raw.githubusercontent.com/yoanbernabeu/FrankenHostinger/main/compose.pro
 
 3. Cliquer sur **Check URL** puis **Continue**
 
-### 4.4 Configurer les variables d'environnement
+### 4.5 Configurer les variables d'environnement
 
 Dans le formulaire, ajouter les **Environment Variables** :
 
@@ -258,31 +264,23 @@ Pour générer une clé secrète, utiliser :
 openssl rand -hex 16
 ```
 
-### 4.5 Configurer les ports
+### 4.6 Configurer les ports
 
 | Port VPS | Port Container |
 |----------|----------------|
 | `80` | `80` |
 | `443` | `443` |
 
-### 4.6 Déployer
+### 4.7 Déployer
 
 1. Cliquer sur **Deploy**
 2. Attendre que les containers démarrent (1-2 minutes)
 
-### 4.7 Exécuter les migrations
-
-Se connecter en SSH au VPS et exécuter :
-
-```bash
-docker exec -it <container_app_id> bin/console doctrine:migrations:migrate --no-interaction
-```
-
-Ou via le terminal intégré de hPanel.
-
 ### 4.8 Vérifier le SSL
 
 Ouvrir `https://votre-domaine.com` dans un navigateur. Le certificat SSL Let's Encrypt est généré automatiquement par FrankenPHP/Caddy.
+
+> **Note** : Les migrations sont maintenant exécutées automatiquement au démarrage du conteneur.
 
 ---
 
@@ -301,13 +299,9 @@ Ouvrir `https://votre-domaine.com` dans un navigateur. Le certificat SSL Let's E
 2. Cliquer sur **Redeploy** ou **Pull & Restart**
 3. Attendre que la nouvelle image soit téléchargée
 
-### 5.3 Exécuter les migrations (si nécessaire)
+### 5.3 Migrations automatiques
 
-Via SSH ou le terminal hPanel :
-
-```bash
-docker exec -it <container_app_id> bin/console doctrine:migrations:migrate --no-interaction
-```
+Les migrations sont exécutées automatiquement au démarrage du conteneur. Aucune action manuelle n'est nécessaire.
 
 ---
 
