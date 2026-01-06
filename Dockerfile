@@ -18,3 +18,9 @@ COPY . /app
 # Installer les dépendances (APP_ENV=prod évite le chargement des bundles dev)
 RUN composer install --no-dev --optimize-autoloader --no-scripts \
     && composer dump-autoload --optimize
+
+# Script d'entrypoint pour init DB + migrations
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]

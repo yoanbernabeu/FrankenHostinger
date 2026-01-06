@@ -8,9 +8,9 @@ services:
       - "443:443/udp"
     environment:
       APP_ENV: prod
-      APP_SECRET: ${APP_SECRET}
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8
-      SERVER_NAME: ${SERVER_NAME}
+      APP_SECRET: ${APP_SECRET:-change_me_in_production_with_secure_secret}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=16&charset=utf8
+      SERVER_NAME: ${SERVER_NAME:-:80}
     volumes:
       - caddy_data:/data
       - caddy_config:/config
@@ -22,13 +22,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
     volumes:
       - database_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
       interval: 10s
       timeout: 5s
       retries: 5
