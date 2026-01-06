@@ -9,7 +9,7 @@ services:
     environment:
       APP_ENV: prod
       APP_SECRET: ${APP_SECRET:-change_me_in_production_with_secure_secret}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=16&charset=utf8
+      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-S3cur3P4ssw0rd2024}@database:5432/${POSTGRES_DB:-app}?serverVersion=16&charset=utf8
       SERVER_NAME: ${SERVER_NAME:-:80}
     volumes:
       - caddy_data:/data
@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-app}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-S3cur3P4ssw0rd2024}
       POSTGRES_DB: ${POSTGRES_DB:-app}
     volumes:
       - database_data:/var/lib/postgresql/data
