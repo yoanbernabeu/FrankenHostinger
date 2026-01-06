@@ -1,0 +1,5 @@
+.git
+vendor
+var
+tests
+.env.local
